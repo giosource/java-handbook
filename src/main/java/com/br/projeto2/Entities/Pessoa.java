@@ -1,5 +1,6 @@
 package com.br.projeto2.Entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +13,15 @@ public class Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
+    @Column(unique = true)
     private String email;
+    private String senha;
+    
+    public Pessoa(String nome, String email, String senha) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+    }
     public int getId() {
         return id;
     }
@@ -30,5 +39,11 @@ public class Pessoa {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getSenha() {
+        return senha;
+    }
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

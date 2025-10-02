@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.projeto2.Entities.Pessoa;
 import com.br.projeto2.Repositories.PessoaRepository;
-
 
 @RestController
 @RequestMapping("/pessoa")
@@ -22,7 +22,7 @@ public class PessoaController {
     PessoaRepository pessoaRepository;
 
     @PostMapping("/salvar")
-    public void salvar2(@RequestBody Pessoa pessoa) {
+    public void salvar(@RequestBody Pessoa pessoa) {
         pessoaRepository.save(pessoa);
     }
 
@@ -31,9 +31,8 @@ public class PessoaController {
         List<Pessoa> pessoas = pessoaRepository.findAll();
         for (Pessoa pessoa : pessoas) {
             System.out.println(
-                "Nome:" + pessoa.getNome() + "\n" +
-                "Email:" + pessoa.getEmail() + "\n"
-            );
+                    "Nome:" + pessoa.getNome() + "\n" +
+                    "Email:" + pessoa.getEmail() + "\n");
         }
     }
 
@@ -42,5 +41,13 @@ public class PessoaController {
         if (pessoaRepository.existsById(idPessoa)) {
             pessoaRepository.deleteById(idPessoa);
         }
+    }
+
+    @PutMapping("/editar/{idPessoa}")
+    public void editar(@PathVariable int idPessoa, @RequestBody Pessoa novaPessoa) {
+        Pessoa pessoa = pessoaRepository.findById(idPessoa).get();
+        pessoa.setNome(novaPessoa.getNome());
+        pessoa.setEmail(novaPessoa.getEmail());
+        pessoaRepository.save(pessoa);
     }
 }
