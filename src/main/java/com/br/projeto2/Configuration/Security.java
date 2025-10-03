@@ -2,6 +2,7 @@ package com.br.projeto2.Configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,16 +16,16 @@ import com.br.projeto2.Repositories.PessoaRepository;
 @Configuration
 public class Security {
 
-    // @Bean
-    // public UserDetailsService userDetailsService(PessoaRepository repo) {
-    //     return username -> repo.findByEmail(username)
-    //     .map(p -> org.springframework.security.core.userdetails.User
-    //     .withUsername(p.getEmail())
-    //     .password(p.getSenha()) // precisa estar BCRYPT
-    //     .roles("USER") // vira ROLE_USER
-    //     .build())
-    //     .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-    // }
+    @Bean
+    public UserDetailsService userDetailsService(PessoaRepository repo) {
+        return username -> repo.findByEmail(username)
+        .map(p -> org.springframework.security.core.userdetails.User
+        .withUsername(p.getEmail())
+        .password(p.getSenha()) // precisa estar BCRYPT
+        .roles("USER") // vira ROLE_USER
+        .build())
+        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,7 +48,7 @@ public class Security {
         "/swagger-resources/**",
         "/webjars/**")
         .permitAll()
-        .requestMatchers(HttpMethod.POST, "/pessoa/cadastrarPessoa").permitAll()
+        .requestMatchers(HttpMethod.POST, "/pessoa/salvar").permitAll()
         .anyRequest().authenticated())
         .httpBasic(b -> {
         })
