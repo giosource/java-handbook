@@ -17,6 +17,8 @@ public class Pessoa {
     private String email;
     private String senha;
     
+    public Pessoa() {
+    }
     public Pessoa(String nome, String email, String senha) {
         this.nome = nome;
         this.email = email;

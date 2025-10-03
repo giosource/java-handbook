@@ -14,6 +14,15 @@ public class Produto {
     private Double precoVenda;
     private Double precoCusto;
     private int estoque;
+    
+    public Produto() {
+    }
+    public Produto(String nome, Double precoVenda, Double precoCusto, int estoque) {
+        this.nome = nome;
+        this.precoVenda = precoVenda;
+        this.precoCusto = precoCusto;
+        this.estoque = estoque;
+    }
     public int getId() {
         return id;
     }
