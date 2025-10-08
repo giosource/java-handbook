@@ -13,17 +13,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.projeto2.Dto.PessoaLoginDto;
 import com.br.projeto2.Entities.Pessoa;
 import com.br.projeto2.Repositories.PessoaRepository;
 
 @RestController
 @RequestMapping("/pessoa")
 public class PessoaController {
+
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     PessoaRepository pessoaRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    PessoaController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/salvar")
     public void salvar(@RequestBody Pessoa pessoa) {
@@ -56,4 +60,19 @@ public class PessoaController {
         pessoa.setEmail(novaPessoa.getEmail());
         pessoaRepository.save(pessoa);
     }
+
+    @PostMapping("/login")
+    public String login(@RequestBody PessoaLoginDto pessoaLoginDto) {
+        Pessoa pessoa = pessoaRepository.findByEmail(pessoaLoginDto.getEmail()).get();
+        if (pessoa != null) {
+            if (passwordEncoder.matches(pessoaLoginDto.getSenha(), pessoa.getSenha())) {
+                return "Login com sucesso!";
+            } else {
+                return "Senha incorreta!";
+            }
+        } else {
+            return "Email não cadastrado!";
+        }      
+    }
+    
 }
