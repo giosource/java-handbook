@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Pessoa {
@@ -16,14 +17,20 @@ public class Pessoa {
     @Column(unique = true)
     private String email;
     private String senha;
+
+    @ManyToOne
+    private Endereco enderecos;
     
     public Pessoa() {
     }
-    public Pessoa(String nome, String email, String senha) {
+    
+    public Pessoa(String nome, String email, String senha, Endereco enderecos) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.enderecos = enderecos;
     }
+
     public int getId() {
         return id;
     }
@@ -47,5 +54,13 @@ public class Pessoa {
     }
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Endereco getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(Endereco enderecos) {
+        this.enderecos = enderecos;
     }
 }

@@ -13,27 +13,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.projeto2.Dto.PessoaDto;
 import com.br.projeto2.Dto.PessoaLoginDto;
 import com.br.projeto2.Entities.Pessoa;
+import com.br.projeto2.Repositories.EnderecoRepository;
 import com.br.projeto2.Repositories.PessoaRepository;
 
 @RestController
 @RequestMapping("/pessoa")
 public class PessoaController {
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Autowired
     PessoaRepository pessoaRepository;
-
-    PessoaController(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    EnderecoRepository enderecoRepository;
 
     @PostMapping("/salvar")
-    public void salvar(@RequestBody Pessoa pessoa) {
-        String senhaCrypt = passwordEncoder.encode(pessoa.getSenha());
-        pessoa.setSenha(senhaCrypt);
+    public String salvar(@RequestBody PessoaDto pessoaDto) {
+
+        if (pessoaRepository.findByEmail(pessoaDto.getEmail()).isPresent()) {
+            return "E-mail já cadastrado!";
+        }
+
+        String hash = passwordEncoder.encode(pessoaDto.getSenha());
+        pessoaDto.setSenha(hash);
+
+        Pessoa pessoa = new Pessoa(pessoaDto.getNome(), pessoaDto.getEmail(), pessoaDto.getSenha(),
+                enderecoRepository.findById(pessoaDto.getEnderecoId()).get());
         pessoaRepository.save(pessoa);
+
+        return "Pessoa cadastrada!";
     }
 
     @GetMapping("/listar")
@@ -42,23 +54,27 @@ public class PessoaController {
         for (Pessoa pessoa : pessoas) {
             System.out.println(
                     "Nome:" + pessoa.getNome() + "\n" +
-                    "Email:" + pessoa.getEmail() + "\n");
+                            "Email:" + pessoa.getEmail() + "\n");
         }
     }
 
     @DeleteMapping("/deletar/{idPessoa}")
-    public void deletarPorId(@PathVariable int idPessoa) {
+    public String deletarPorId(@PathVariable int idPessoa) {
         if (pessoaRepository.existsById(idPessoa)) {
             pessoaRepository.deleteById(idPessoa);
+            return "Pessoa deletada!";
+        } else {
+            return "Pessoa não existe!";
         }
     }
 
     @PutMapping("/editar/{idPessoa}")
-    public void editar(@PathVariable int idPessoa, @RequestBody Pessoa novaPessoa) {
+    public String editar(@PathVariable int idPessoa, @RequestBody Pessoa novaPessoa) {
         Pessoa pessoa = pessoaRepository.findById(idPessoa).get();
         pessoa.setNome(novaPessoa.getNome());
         pessoa.setEmail(novaPessoa.getEmail());
         pessoaRepository.save(pessoa);
+        return "Pessoa editada!";
     }
 
     @PostMapping("/login")
@@ -72,7 +88,7 @@ public class PessoaController {
             }
         } else {
             return "Email não cadastrado!";
-        }      
+        }
     }
-    
+
 }
