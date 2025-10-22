@@ -1,10 +1,13 @@
 package com.br.ecommerce.ecommerce.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Usuario {
@@ -14,21 +17,32 @@ public class Usuario {
     private String nome;
     private String cpf;
     private String telefone;
-    
+
     @Column(unique = true)
     private String email;
-    
+
     private String senha;
+
+    @ManyToOne
+    @JsonIgnore
+    private Endereco endereco;
+
+    @ManyToOne
+    @JsonIgnore
+    private Pedido pedido;
 
     public Usuario() {
     }
-
-    public Usuario(String nome, String cpf, String telefone, String email, String senha) {
+    
+    public Usuario(String nome, String cpf, String telefone, String email, String senha, Endereco endereco,
+            Pedido pedido) {
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.email = email;
         this.senha = senha;
+        this.endereco = endereco;
+        this.pedido = pedido;
     }
 
     public int getId() {
@@ -77,6 +91,22 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
 }
