@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.ecommerce.ecommerce.Dto.ProdutoDto;
 import com.br.ecommerce.ecommerce.Entities.Produto;
+import com.br.ecommerce.ecommerce.Repositories.CategoriaRepository;
+import com.br.ecommerce.ecommerce.Repositories.PedidoRepository;
 import com.br.ecommerce.ecommerce.Repositories.ProdutoRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,8 +25,19 @@ public class ProdutoController {
     @Autowired
     ProdutoRepository produtoRepository;
 
+    @Autowired
+    CategoriaRepository categoriaRepository;
+
+    @Autowired
+    PedidoRepository pedidoRepository;
+
     @PostMapping("/salvar")
-    public String salvar(@RequestBody Produto produto) {
+    public String salvar(@RequestBody ProdutoDto produtoDto) {
+
+        Produto produto = new Produto(produtoDto.getNome(), produtoDto.getEspecificacao(), produtoDto.getPreco(),
+                produtoDto.getEstoque(), produtoDto.isDisponibilidade(),
+                categoriaRepository.findById(produtoDto.getCategoriaId()).get(),
+                pedidoRepository.findById(produtoDto.getPedidoId()).get());
         produtoRepository.save(produto);
         return "Produto cadastrado!";
     }
@@ -42,7 +56,6 @@ public class ProdutoController {
         produto.setPreco(novoProduto.getPreco());
         produto.setEstoque(novoProduto.getEstoque());
         produto.setDisponibilidade(novoProduto.isDisponibilidade());
-        produto.setCategoria(novoProduto.getCategoria());
 
         produtoRepository.save(produto);
         return "Produto editado!";

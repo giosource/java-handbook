@@ -1,13 +1,18 @@
 package com.br.ecommerce.ecommerce.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.ecommerce.ecommerce.Dto.CategoriaDto;
 import com.br.ecommerce.ecommerce.Entities.Categoria;
+import com.br.ecommerce.ecommerce.Entities.Produto;
 import com.br.ecommerce.ecommerce.Repositories.CategoriaRepository;
+import com.br.ecommerce.ecommerce.Repositories.ProdutoRepository;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +27,28 @@ public class CategoriaController {
     @Autowired
     CategoriaRepository categoriaRepository;
 
+    @Autowired
+    ProdutoRepository produtoRepository;
+
     @PostMapping("/salvar")
-    public String salvar(@RequestBody Categoria categoria) {
+    public String salvar(@RequestBody CategoriaDto categoriaDto) {
+
+        List<Produto> produtos = new ArrayList<>();
+
+        if (categoriaDto.getProdutosId() != null) {
+            for (Integer produtoId : categoriaDto.getProdutosId()) {
+                if (produtoRepository.findById(produtoId).isPresent()) {
+                    produtos.add(produtoRepository.findById(produtoId).get());
+                } else {
+                    return "Produto inexistente!";
+                }
+            }
+        } else {
+            return "Sem produtos!";
+        }
+
+        Categoria categoria = new Categoria(categoriaDto.getNome(), produtos);
+
         categoriaRepository.save(categoria);
         return "Categoria cadastrada!";
     }

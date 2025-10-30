@@ -1,13 +1,19 @@
 package com.br.ecommerce.ecommerce.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.ecommerce.ecommerce.Dto.PedidoDto;
 import com.br.ecommerce.ecommerce.Entities.Pedido;
+import com.br.ecommerce.ecommerce.Entities.Produto;
 import com.br.ecommerce.ecommerce.Repositories.PedidoRepository;
+import com.br.ecommerce.ecommerce.Repositories.ProdutoRepository;
+import com.br.ecommerce.ecommerce.Repositories.UsuarioRepository;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +28,31 @@ public class PedidoController {
     @Autowired
     PedidoRepository pedidoRepository;
 
+    @Autowired
+    ProdutoRepository produtoRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
     @PostMapping("/salvar")
-    public String salvar(@RequestBody Pedido pedido) {
+    public String salvar(@RequestBody PedidoDto pedidoDto) {
+
+        List<Produto> produtos = new ArrayList<>();
+
+        if (pedidoDto.getProdutosId() != null) {
+            for (Integer produtoId : pedidoDto.getProdutosId()) {
+                if (pedidoRepository.findById(produtoId).isPresent()) {
+                    produtos.add(produtoRepository.findById(produtoId).get());
+                } else {
+                    return "Produto inexistente!";
+                }
+            }
+        } else {
+            return "Sem produtos!";
+        }
+
+        Pedido pedido = new Pedido(pedidoDto.getLocalizacao(), pedidoDto.getValor(), pedidoDto.isCancelamento(),
+                usuarioRepository.findById(pedidoDto.getUsuarioId()).get(), produtos);
         pedidoRepository.save(pedido);
         return "Pedido cadastrado!";
     }

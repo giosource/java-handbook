@@ -3,10 +3,14 @@ package com.br.ecommerce.ecommerce.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.ecommerce.ecommerce.Dto.UsuarioDto;
 import com.br.ecommerce.ecommerce.Entities.Usuario;
+import com.br.ecommerce.ecommerce.Repositories.EnderecoRepository;
+import com.br.ecommerce.ecommerce.Repositories.PedidoRepository;
 import com.br.ecommerce.ecommerce.Repositories.UsuarioRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +24,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class UsuarioController {
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     UsuarioRepository usuarioRepository;
 
+
+    @Autowired
+    EnderecoRepository enderecoRepository;
+
+    @Autowired
+    PedidoRepository pedidoRepository;
+
     @PostMapping("/salvar")
-    public String salvar(@RequestBody Usuario usuario) {
-        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+    public String salvar(@RequestBody UsuarioDto usuarioDto) {
+        if (usuarioRepository.findByEmail(usuarioDto.getEmail()).isPresent()) {
             return "E-mail existente!";
         }
 
+        String hash = passwordEncoder.encode(usuarioDto.getSenha());
+        usuarioDto.setSenha(hash);
+        Usuario usuario = new Usuario(usuarioDto.getNome(), usuarioDto.getCpf(), usuarioDto.getTelefone(), usuarioDto.getEmail(), usuarioDto.getSenha(), enderecoRepository.findById(usuarioDto.getEnderecoId()).get(), pedidoRepository.findById(usuarioDto.getPedidoId()).get());
         usuarioRepository.save(usuario);
         return "Usuário cadastrado!";
     }

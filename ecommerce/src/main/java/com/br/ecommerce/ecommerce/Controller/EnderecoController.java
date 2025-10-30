@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.ecommerce.ecommerce.Dto.EnderecoDto;
 import com.br.ecommerce.ecommerce.Entities.Endereco;
 import com.br.ecommerce.ecommerce.Repositories.EnderecoRepository;
+import com.br.ecommerce.ecommerce.Repositories.UsuarioRepository;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,8 +25,15 @@ public class EnderecoController {
     @Autowired
     EnderecoRepository enderecoRepository;
 
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
     @PostMapping("/salvar")
-    public String salvar(@RequestBody Endereco endereco) {
+    public String salvar(@RequestBody EnderecoDto enderecoDto) {
+
+        Endereco endereco = new Endereco(enderecoDto.getCep(), enderecoDto.getNumero(), enderecoDto.getLogradouro(),
+                enderecoDto.getCidade(), enderecoDto.getUf(),
+                usuarioRepository.findById(enderecoDto.getUsuarioId()).get());
         enderecoRepository.save(endereco);
         return "Endereço cadastrado!";
     }
