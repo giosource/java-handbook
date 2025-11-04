@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.ecommerce.ecommerce.Dto.UsuarioDto;
+import com.br.ecommerce.ecommerce.Entities.Endereco;
+import com.br.ecommerce.ecommerce.Entities.Pedido;
 import com.br.ecommerce.ecommerce.Entities.Usuario;
 import com.br.ecommerce.ecommerce.Repositories.EnderecoRepository;
 import com.br.ecommerce.ecommerce.Repositories.PedidoRepository;
@@ -29,7 +31,6 @@ public class UsuarioController {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-
     @Autowired
     EnderecoRepository enderecoRepository;
 
@@ -44,7 +45,12 @@ public class UsuarioController {
 
         String hash = passwordEncoder.encode(usuarioDto.getSenha());
         usuarioDto.setSenha(hash);
-        Usuario usuario = new Usuario(usuarioDto.getNome(), usuarioDto.getCpf(), usuarioDto.getTelefone(), usuarioDto.getEmail(), usuarioDto.getSenha(), enderecoRepository.findById(usuarioDto.getEnderecoId()).get(), pedidoRepository.findById(usuarioDto.getPedidoId()).get());
+
+        Endereco endereco = null;
+        Pedido pedido = null;
+
+        Usuario usuario = new Usuario(usuarioDto.getNome(), usuarioDto.getCpf(), usuarioDto.getTelefone(),
+                usuarioDto.getEmail(), usuarioDto.getSenha(), endereco, pedido);
         usuarioRepository.save(usuario);
         return "Usuário cadastrado!";
     }

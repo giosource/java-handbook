@@ -33,7 +33,7 @@ public class Usuario {
 
     public Usuario() {
     }
-    
+
     public Usuario(String nome, String cpf, String telefone, String email, String senha, Endereco endereco,
             Pedido pedido) {
         this.nome = nome;

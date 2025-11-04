@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.ecommerce.ecommerce.Dto.ProdutoDto;
+import com.br.ecommerce.ecommerce.Entities.Categoria;
+import com.br.ecommerce.ecommerce.Entities.Pedido;
 import com.br.ecommerce.ecommerce.Entities.Produto;
 import com.br.ecommerce.ecommerce.Repositories.CategoriaRepository;
 import com.br.ecommerce.ecommerce.Repositories.PedidoRepository;
@@ -34,10 +36,11 @@ public class ProdutoController {
     @PostMapping("/salvar")
     public String salvar(@RequestBody ProdutoDto produtoDto) {
 
+        Categoria categoria = null;
+        Pedido pedido = null;
         Produto produto = new Produto(produtoDto.getNome(), produtoDto.getEspecificacao(), produtoDto.getPreco(),
-                produtoDto.getEstoque(), produtoDto.isDisponibilidade(),
-                categoriaRepository.findById(produtoDto.getCategoriaId()).get(),
-                pedidoRepository.findById(produtoDto.getPedidoId()).get());
+                produtoDto.getEstoque(), produtoDto.isDisponibilidade(), categoria,
+                pedido);
         produtoRepository.save(produto);
         return "Produto cadastrado!";
     }
@@ -48,15 +51,15 @@ public class ProdutoController {
         return produtos;
     }
 
-    @PutMapping("/editar/{idProduto}")
-    public String editar(@PathVariable int idProduto, @RequestBody Produto novoProduto) {
+    @PutMapping("/editar/{idProduto}/{idCategoria}")
+    public String editar(@PathVariable int idProduto, @PathVariable int idCategoria, @RequestBody Produto novoProduto) {
         Produto produto = produtoRepository.findById(idProduto).get();
         produto.setNome(novoProduto.getNome());
         produto.setEspecificacao(novoProduto.getEspecificacao());
         produto.setPreco(novoProduto.getPreco());
         produto.setEstoque(novoProduto.getEstoque());
         produto.setDisponibilidade(novoProduto.isDisponibilidade());
-
+        produto.setCategoria(categoriaRepository.findById(idCategoria).get());
         produtoRepository.save(produto);
         return "Produto editado!";
     }

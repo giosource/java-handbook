@@ -41,7 +41,7 @@ public class PedidoController {
 
         if (pedidoDto.getProdutosId() != null) {
             for (Integer produtoId : pedidoDto.getProdutosId()) {
-                if (pedidoRepository.findById(produtoId).isPresent()) {
+                if (produtoRepository.findById(produtoId).isPresent()) {
                     produtos.add(produtoRepository.findById(produtoId).get());
                 } else {
                     return "Produto inexistente!";
@@ -69,6 +69,8 @@ public class PedidoController {
         pedido.setLocalizacao(novoPedido.getLocalizacao());
         pedido.setValor(novoPedido.getValor());
         pedido.setCancelamento(novoPedido.isCancelamento());
+        pedido.setUsuario(pedidoRepository.findById(idPedido).get().getUsuario());
+        pedido.setProdutos(pedidoRepository.findById(idPedido).get().getProdutos());
 
         pedidoRepository.save(pedido);
         return "Pedido editado!";
