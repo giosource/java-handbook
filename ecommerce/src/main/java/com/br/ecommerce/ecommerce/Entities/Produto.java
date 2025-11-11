@@ -25,8 +25,9 @@ public class Produto {
     @JoinColumn(name = "categoria")
     private Categoria categoria;
 
+    // TODO: Necessidade de "Item"
     @ManyToOne
-    @JsonIgnore
+    @JoinColumn(name = "pedido")
     private Pedido pedido;
 
     public Produto() {

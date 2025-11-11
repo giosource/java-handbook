@@ -2,6 +2,8 @@ package com.br.ecommerce.ecommerce.Entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +25,8 @@ public class Pedido {
     @JoinColumn(name = "usuario")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany
+    @JsonIgnore
     private List<Produto> produtos;
 
     public Pedido() {
