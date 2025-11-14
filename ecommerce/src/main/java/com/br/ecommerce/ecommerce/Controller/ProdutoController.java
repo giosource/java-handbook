@@ -1,5 +1,6 @@
 package com.br.ecommerce.ecommerce.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.ecommerce.ecommerce.Dto.ProdutoDto;
-import com.br.ecommerce.ecommerce.Entities.Categoria;
+import com.br.ecommerce.ecommerce.Entities.Item;
 import com.br.ecommerce.ecommerce.Entities.Produto;
 import com.br.ecommerce.ecommerce.Repositories.CategoriaRepository;
-import com.br.ecommerce.ecommerce.Repositories.PedidoRepository;
+import com.br.ecommerce.ecommerce.Repositories.ItemRepository;
 import com.br.ecommerce.ecommerce.Repositories.ProdutoRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,15 +31,28 @@ public class ProdutoController {
     CategoriaRepository categoriaRepository;
 
     @Autowired
-    PedidoRepository pedidoRepository;
+    ItemRepository itemRepository;
 
     @PostMapping("/salvar")
     public String salvar(@RequestBody ProdutoDto produtoDto) {
 
+        List<Item> itens = new ArrayList<>();
+
+        if (produtoDto.getItensId() != null) {
+            for (Integer itemId : produtoDto.getItensId()) {
+                if (itemRepository.findById(itemId).isPresent()) {
+                    itens.add(itemRepository.findById(itemId).get());
+                } else {
+                    return "Item inexistente!";
+                }
+            }
+        } else {
+            return "Sem itens!";
+        }
+
         Produto produto = new Produto(produtoDto.getNome(), produtoDto.getEspecificacao(), produtoDto.getPreco(),
                 produtoDto.getEstoque(), produtoDto.isDisponibilidade(),
-                categoriaRepository.findById(produtoDto.getCategoriaId()).get(),
-                pedidoRepository.findById(produtoDto.getPedidoId()).get());
+                categoriaRepository.findById(produtoDto.getCategoriaId()).get(), itens);
         produtoRepository.save(produto);
         return "Produto cadastrado!";
     }
@@ -49,8 +63,8 @@ public class ProdutoController {
         return produtos;
     }
 
-    @PutMapping("/editar/{idProduto}/{idCategoria}/{idPedido}")
-    public String editar(@PathVariable int idProduto, @PathVariable int idCategoria, @PathVariable int idPedido,
+    @PutMapping("/editar/{idProduto}")
+    public String editar(@PathVariable int idProduto,
             @RequestBody Produto novoProduto) {
         Produto produto = produtoRepository.findById(idProduto).get();
         produto.setNome(novoProduto.getNome());
@@ -58,9 +72,9 @@ public class ProdutoController {
         produto.setPreco(novoProduto.getPreco());
         produto.setEstoque(novoProduto.getEstoque());
         produto.setDisponibilidade(novoProduto.isDisponibilidade());
-        produto.setCategoria(categoriaRepository.findById(idCategoria).get());
-        produto.setPedido(pedidoRepository.findById(idPedido).get());
+        produto.setCategoria(produtoRepository.findById(idProduto).get().getCategoria());
         produtoRepository.save(produto);
+        produto.setItens(produtoRepository.findById(idProduto).get().getItens());
         return "Produto editado!";
     }
 

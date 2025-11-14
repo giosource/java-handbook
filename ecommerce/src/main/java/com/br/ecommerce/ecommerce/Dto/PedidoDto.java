@@ -7,17 +7,17 @@ public class PedidoDto {
     private double valor;
     private boolean cancelamento;
     private int usuarioId;
-    private List<Integer> produtosId;
+    private List<Integer> itensId;
 
     public PedidoDto() {
     }
 
-    public PedidoDto(String localizacao, double valor, boolean cancelamento, int usuarioId, List<Integer> produtosId) {
+    public PedidoDto(String localizacao, double valor, boolean cancelamento, int usuarioId, List<Integer> itensId) {
         this.localizacao = localizacao;
         this.valor = valor;
         this.cancelamento = cancelamento;
         this.usuarioId = usuarioId;
-        this.produtosId = produtosId;
+        this.itensId = itensId;
     }
 
     public String getLocalizacao() {
@@ -52,12 +52,12 @@ public class PedidoDto {
         this.usuarioId = usuarioId;
     }
 
-    public List<Integer> getProdutosId() {
-        return produtosId;
+    public List<Integer> getItensId() {
+        return itensId;
     }
 
-    public void setProdutosId(List<Integer> produtosId) {
-        this.produtosId = produtosId;
+    public void setItensId(List<Integer> itensId) {
+        this.itensId = itensId;
     }
 
 }

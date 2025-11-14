@@ -27,17 +27,17 @@ public class Pedido {
 
     @OneToMany
     @JsonIgnore
-    private List<Produto> produtos;
+    private List<Item> itens;
 
     public Pedido() {
     }
 
-    public Pedido(String localizacao, double valor, boolean cancelamento, Usuario usuario, List<Produto> produtos) {
+    public Pedido(String localizacao, double valor, boolean cancelamento, Usuario usuario, List<Item> itens) {
         this.localizacao = localizacao;
         this.valor = valor;
         this.cancelamento = cancelamento;
         this.usuario = usuario;
-        this.produtos = produtos;
+        this.itens = itens;
     }
 
     public int getId() {
@@ -80,12 +80,12 @@ public class Pedido {
         this.usuario = usuario;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
+    public List<Item> getItens() {
+        return itens;
     }
 
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
+    public void setItens(List<Item> itens) {
+        this.itens = itens;
     }
 
 }

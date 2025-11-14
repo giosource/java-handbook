@@ -1,5 +1,7 @@
 package com.br.ecommerce.ecommerce.Dto;
 
+import java.util.List;
+
 public class ProdutoDto {
 
     private String nome;
@@ -8,20 +10,20 @@ public class ProdutoDto {
     private int estoque;
     private boolean disponibilidade;
     private int categoriaId;
-    private int pedidoId;
+    private List<Integer> itensId;
 
     public ProdutoDto() {
     }
 
     public ProdutoDto(String nome, String especificacao, double preco, int estoque, boolean disponibilidade,
-            int categoriaId, int pedidoId) {
+            int categoriaId, List<Integer> itensId) {
         this.nome = nome;
         this.especificacao = especificacao;
         this.preco = preco;
         this.estoque = estoque;
         this.disponibilidade = disponibilidade;
         this.categoriaId = categoriaId;
-        this.pedidoId = pedidoId;
+        this.itensId = itensId;
     }
 
     public String getNome() {
@@ -72,12 +74,12 @@ public class ProdutoDto {
         this.categoriaId = categoriaId;
     }
 
-    public int getPedidoId() {
-        return pedidoId;
+    public List<Integer> getItensId() {
+        return itensId;
     }
 
-    public void setPedidoId(int pedidoId) {
-        this.pedidoId = pedidoId;
+    public void setItensId(List<Integer> itensId) {
+        this.itensId = itensId;
     }
 
 }

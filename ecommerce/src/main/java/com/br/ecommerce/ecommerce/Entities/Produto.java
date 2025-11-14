@@ -1,5 +1,7 @@
 package com.br.ecommerce.ecommerce.Entities;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Produto {
@@ -25,23 +28,22 @@ public class Produto {
     @JoinColumn(name = "categoria")
     private Categoria categoria;
 
-    // TODO: Necessidade de "Item"
-    @ManyToOne
-    @JoinColumn(name = "pedido")
-    private Pedido pedido;
+    @OneToMany
+    @JsonIgnore
+    private List<Item> itens;
 
     public Produto() {
     }
 
     public Produto(String nome, String especificacao, double preco, int estoque, boolean disponibilidade,
-            Categoria categoria, Pedido pedido) {
+            Categoria categoria, List<Item> itens) {
         this.nome = nome;
         this.especificacao = especificacao;
         this.preco = preco;
         this.estoque = estoque;
         this.disponibilidade = disponibilidade;
         this.categoria = categoria;
-        this.pedido = pedido;
+        this.itens = itens;
     }
 
     public int getId() {
@@ -100,12 +102,11 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public List<Item> getItens() {
+        return itens;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setItens(List<Item> itens) {
+        this.itens = itens;
     }
-
 }

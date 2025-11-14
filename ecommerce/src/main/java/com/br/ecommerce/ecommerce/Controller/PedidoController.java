@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.ecommerce.ecommerce.Dto.PedidoDto;
+import com.br.ecommerce.ecommerce.Entities.Item;
 import com.br.ecommerce.ecommerce.Entities.Pedido;
-import com.br.ecommerce.ecommerce.Entities.Produto;
+import com.br.ecommerce.ecommerce.Repositories.ItemRepository;
 import com.br.ecommerce.ecommerce.Repositories.PedidoRepository;
-import com.br.ecommerce.ecommerce.Repositories.ProdutoRepository;
 import com.br.ecommerce.ecommerce.Repositories.UsuarioRepository;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,30 +29,30 @@ public class PedidoController {
     PedidoRepository pedidoRepository;
 
     @Autowired
-    ProdutoRepository produtoRepository;
+    UsuarioRepository usuarioRepository;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    ItemRepository itemRepository;
 
     @PostMapping("/salvar")
     public String salvar(@RequestBody PedidoDto pedidoDto) {
 
-        List<Produto> produtos = new ArrayList<>();
+        List<Item> itens = new ArrayList<>();
 
-        if (pedidoDto.getProdutosId() != null) {
-            for (Integer produtoId : pedidoDto.getProdutosId()) {
-                if (produtoRepository.findById(produtoId).isPresent()) {
-                    produtos.add(produtoRepository.findById(produtoId).get());
+        if (pedidoDto.getItensId() != null) {
+            for (Integer itemId : pedidoDto.getItensId()) {
+                if (itemRepository.findById(itemId).isPresent()) {
+                    itens.add(itemRepository.findById(itemId).get());
                 } else {
-                    return "Produto inexistente!";
+                    return "Item inexistente!";
                 }
             }
         } else {
-            return "Sem produtos!";
+            return "Sem itens!";
         }
 
         Pedido pedido = new Pedido(pedidoDto.getLocalizacao(), pedidoDto.getValor(), pedidoDto.isCancelamento(),
-                usuarioRepository.findById(pedidoDto.getUsuarioId()).get(), produtos);
+                usuarioRepository.findById(pedidoDto.getUsuarioId()).get(), itens);
         pedidoRepository.save(pedido);
         return "Pedido cadastrado!";
     }
@@ -70,7 +70,7 @@ public class PedidoController {
         pedido.setValor(novoPedido.getValor());
         pedido.setCancelamento(novoPedido.isCancelamento());
         pedido.setUsuario(pedidoRepository.findById(idPedido).get().getUsuario());
-        pedido.setProdutos(pedidoRepository.findById(idPedido).get().getProdutos());
+        pedido.setItens(pedidoRepository.findById(idPedido).get().getItens());
 
         pedidoRepository.save(pedido);
         return "Pedido editado!";
