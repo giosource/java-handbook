@@ -1,9 +1,8 @@
 package com.br.mobility.mobility.domain.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,69 +10,126 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Motorista {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(unique = true, length = 9, nullable = false)
-    private String cnh;
+  @Column(length = 150, nullable = false)
+  private String nome;
 
-    @Column(unique = true, length = 11, nullable = false)
-    private String cpf;
+  @Column(unique = true, length = 11, nullable = false)
+  private String telefone;
 
-    @OneToMany
-    @JoinColumn(name = "endereco")
-    private Endereco endereco;
+  @Column(unique = true, nullable = false)
+  private String email;
 
-    @ManyToOne
-    @JsonIgnore
-    private List<Veiculo> veiculos;
+  @Column(nullable = false)
+  private String senha;
 
-    public Motorista() {
-    }
+  @Column(unique = true, length = 9, nullable = false)
+  private String cnh;
 
-    public Motorista(String cnh, String cpf, Endereco endereco, List<Veiculo> veiculos) {
-        this.cnh = cnh;
-        this.cpf = cpf;
-        this.endereco = endereco;
-        this.veiculos = veiculos;
-    }
+  @Column(unique = true, length = 11, nullable = false)
+  private String cpf;
 
-    public Long getId() {
-        return id;
-    }
+  @ManyToOne(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "endereco")
+  private Endereco endereco;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  @OneToOne
+  @JsonIgnore
+  private Veiculo veiculo;
 
-    public String getCnh() {
-        return cnh;
-    }
+  public Motorista() {
+  }
 
-    public void setCnh(String cnh) {
-        this.cnh = cnh;
-    }
+  public Motorista(String nome, String telefone, String email, String senha, String cnh, String cpf, Endereco endereco,
+      Veiculo veiculo) {
+    this.nome = nome;
+    this.telefone = telefone;
+    this.email = email;
+    this.senha = senha;
+    this.cnh = cnh;
+    this.cpf = cpf;
+    this.endereco = endereco;
+    this.veiculo = veiculo;
+  }
 
-    public String getCpf() {
-        return cpf;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
+  public String getNome() {
+    return nome;
+  }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getTelefone() {
+    return telefone;
+  }
+
+  public void setTelefone(String telefone) {
+    this.telefone = telefone;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getSenha() {
+    return senha;
+  }
+
+  public void setSenha(String senha) {
+    this.senha = senha;
+  }
+
+  public String getCnh() {
+    return cnh;
+  }
+
+  public void setCnh(String cnh) {
+    this.cnh = cnh;
+  }
+
+  public String getCpf() {
+    return cpf;
+  }
+
+  public void setCpf(String cpf) {
+    this.cpf = cpf;
+  }
+
+  public Endereco getEndereco() {
+    return endereco;
+  }
+
+  public void setEndereco(Endereco endereco) {
+    this.endereco = endereco;
+  }
+
+  public Veiculo getVeiculo() {
+    return veiculo;
+  }
+
+  public void setVeiculo(Veiculo veiculo) {
+    this.veiculo = veiculo;
+  }
 
 }

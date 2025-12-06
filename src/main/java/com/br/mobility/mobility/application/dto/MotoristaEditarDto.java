@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class PassageiroEditarDto {
+public class MotoristaEditarDto {
 
   @NotBlank
   @Pattern(regexp = "^[A-Za-z]{2,}\\s[A-Za-z]{2,}+$*")
@@ -27,18 +27,29 @@ public class PassageiroEditarDto {
   @Size(min = 8, max = 50)
   private String senha;
 
-  public PassageiroEditarDto() {
+  @NotBlank
+  @Pattern(regexp = "\\d{9}")
+  private String cnh;
+
+  @NotBlank
+  @Pattern(regexp = "\\d{11}")
+  private String cpf;
+
+  public MotoristaEditarDto() {
   }
 
-  public PassageiroEditarDto(
+  public MotoristaEditarDto(
       @NotBlank @Pattern(regexp = "^[A-Za-z]{2,}\\s[A-Za-z]{2,}+$*") @Size(min = 2, max = 100) String nome,
       @NotBlank @Pattern(regexp = "\\d{11}") String telefone,
       @NotBlank @Email @Pattern(regexp = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+$") @Size(min = 5, max = 100) String email,
-      @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$%*#?]{8,}$") @Size(min = 8, max = 50) String senha) {
+      @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$%*#?]{8,}$") @Size(min = 8, max = 50) String senha,
+      @NotBlank @Pattern(regexp = "\\d{9}") String cnh, @NotBlank @Pattern(regexp = "\\d{11}") String cpf) {
     this.nome = nome;
     this.telefone = telefone;
     this.email = email;
     this.senha = senha;
+    this.cnh = cnh;
+    this.cpf = cpf;
   }
 
   public String getNome() {
@@ -72,4 +83,21 @@ public class PassageiroEditarDto {
   public void setSenha(String senha) {
     this.senha = senha;
   }
+
+  public String getCnh() {
+    return cnh;
+  }
+
+  public void setCnh(String cnh) {
+    this.cnh = cnh;
+  }
+
+  public String getCpf() {
+    return cpf;
+  }
+
+  public void setCpf(String cpf) {
+    this.cpf = cpf;
+  }
+
 }
