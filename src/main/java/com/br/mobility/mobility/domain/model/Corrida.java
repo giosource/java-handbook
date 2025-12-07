@@ -19,9 +19,6 @@ public class Corrida {
   private Double distancia;
 
   @Column(nullable = false)
-  private Double taxa;
-
-  @Column(nullable = false)
   private Double valor;
 
   @Column(nullable = false)
@@ -45,10 +42,9 @@ public class Corrida {
   public Corrida() {
   }
 
-  public Corrida(Double distancia, Double taxa, Double valor, Double valorMotorista, boolean cancelamento,
-      Passageiro passageiro, Motorista motorista, Veiculo veiculo) {
+  public Corrida(Double distancia, Double valor, Double valorMotorista, boolean cancelamento, Passageiro passageiro,
+      Motorista motorista, Veiculo veiculo) {
     this.distancia = distancia;
-    this.taxa = taxa;
     this.valor = valor;
     this.valorMotorista = valorMotorista;
     this.cancelamento = cancelamento;
@@ -71,14 +67,6 @@ public class Corrida {
 
   public void setDistancia(Double distancia) {
     this.distancia = distancia;
-  }
-
-  public Double getTaxa() {
-    return taxa;
-  }
-
-  public void setTaxa(Double taxa) {
-    this.taxa = taxa;
   }
 
   public Double getValor() {

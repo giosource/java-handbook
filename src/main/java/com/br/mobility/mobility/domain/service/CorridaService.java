@@ -44,13 +44,13 @@ public class CorridaService {
       novaCorrida.setValor(1.9 * novaCorrida.getDistancia());
     }
 
-    if (novaCorrida.getVeiculo().isAdesivo()) {
-      double taxa = 0.9;
-      novaCorrida.setValorMotorista(novaCorrida.getValor() * taxa);
-    } else if (novaCorrida.getMotorista().isPasse()) {
+    if (novaCorrida.getMotorista().isPasse()) {
       novaCorrida.setValorMotorista(novaCorrida.getValor() - 0.3);
-    } else {
+    } else if (novaCorrida.getVeiculo().isAdesivo()) {
       double taxa = 0.83;
+      novaCorrida.setValorMotorista(novaCorrida.getValor() * taxa);
+    } else {
+      double taxa = 0.9;
       novaCorrida.setValorMotorista(novaCorrida.getValor() * taxa);
     }
 
