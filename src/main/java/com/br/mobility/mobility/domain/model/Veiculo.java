@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Veiculo {
@@ -21,24 +21,24 @@ public class Veiculo {
   @Column(length = 20, nullable = false)
   private String cor;
 
-  @Column(length = 20, nullable = false)
-  private String tipo;
-
-  @Column(unique = true, length = 7, nullable = false)
+  @Column(length = 7, nullable = false)
   private String placa;
 
-  @OneToOne
+  @Column(nullable = false)
+  private boolean adesivo;
+
+  @ManyToOne
   @JoinColumn(name = "motorista")
   private Motorista motorista;
 
   public Veiculo() {
   }
 
-  public Veiculo(String modelo, String cor, String tipo, String placa, Motorista motorista) {
+  public Veiculo(String modelo, String cor, String placa, boolean adesivo, Motorista motorista) {
     this.modelo = modelo;
     this.cor = cor;
-    this.tipo = tipo;
     this.placa = placa;
+    this.adesivo = adesivo;
     this.motorista = motorista;
   }
 
@@ -66,14 +66,6 @@ public class Veiculo {
     this.cor = cor;
   }
 
-  public String getTipo() {
-    return tipo;
-  }
-
-  public void setTipo(String tipo) {
-    this.tipo = tipo;
-  }
-
   public String getPlaca() {
     return placa;
   }
@@ -88,6 +80,14 @@ public class Veiculo {
 
   public void setMotorista(Motorista motorista) {
     this.motorista = motorista;
+  }
+
+  public boolean isAdesivo() {
+    return adesivo;
+  }
+
+  public void setAdesivo(boolean adesivo) {
+    this.adesivo = adesivo;
   }
 
 }

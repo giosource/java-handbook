@@ -1,5 +1,7 @@
 package com.br.mobility.mobility.domain.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -10,7 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Motorista {
@@ -37,27 +39,31 @@ public class Motorista {
   @Column(unique = true, length = 11, nullable = false)
   private String cpf;
 
+  @Column(nullable = false)
+  private boolean passe;
+
   @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "endereco")
   private Endereco endereco;
 
-  @OneToOne
+  @OneToMany
   @JsonIgnore
-  private Veiculo veiculo;
+  private List<Veiculo> veiculos;
 
   public Motorista() {
   }
 
-  public Motorista(String nome, String telefone, String email, String senha, String cnh, String cpf, Endereco endereco,
-      Veiculo veiculo) {
+  public Motorista(String nome, String telefone, String email, String senha, String cnh, String cpf, boolean passe,
+      Endereco endereco, List<Veiculo> veiculos) {
     this.nome = nome;
     this.telefone = telefone;
     this.email = email;
     this.senha = senha;
     this.cnh = cnh;
     this.cpf = cpf;
+    this.passe = passe;
     this.endereco = endereco;
-    this.veiculo = veiculo;
+    this.veiculos = veiculos;
   }
 
   public Long getId() {
@@ -124,12 +130,20 @@ public class Motorista {
     this.endereco = endereco;
   }
 
-  public Veiculo getVeiculo() {
-    return veiculo;
+  public List<Veiculo> getVeiculos() {
+    return veiculos;
   }
 
-  public void setVeiculo(Veiculo veiculo) {
-    this.veiculo = veiculo;
+  public void setVeiculos(List<Veiculo> veiculos) {
+    this.veiculos = veiculos;
+  }
+
+  public boolean isPasse() {
+    return passe;
+  }
+
+  public void setPasse(boolean passe) {
+    this.passe = passe;
   }
 
 }

@@ -1,5 +1,6 @@
 package com.br.mobility.mobility.domain.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,12 +12,18 @@ import com.br.mobility.mobility.application.dto.EnderecoListarDto;
 import com.br.mobility.mobility.application.dto.MotoristaCadastrarDto;
 import com.br.mobility.mobility.application.dto.MotoristaEditarDto;
 import com.br.mobility.mobility.application.dto.MotoristaListarDto;
+import com.br.mobility.mobility.application.dto.VeiculoCadastrarDto;
+import com.br.mobility.mobility.application.dto.VeiculoEditarDto;
+import com.br.mobility.mobility.application.dto.VeiculoListarDto;
 import com.br.mobility.mobility.application.mapper.EnderecoMapper;
 import com.br.mobility.mobility.application.mapper.MotoristaMapper;
+import com.br.mobility.mobility.application.mapper.VeiculoMapper;
 import com.br.mobility.mobility.domain.model.Endereco;
 import com.br.mobility.mobility.domain.model.Motorista;
+import com.br.mobility.mobility.domain.model.Veiculo;
 import com.br.mobility.mobility.domain.repository.EnderecoRepository;
 import com.br.mobility.mobility.domain.repository.MotoristaRepository;
+import com.br.mobility.mobility.domain.repository.VeiculoRepository;
 import com.br.mobility.mobility.exception.BusinessException;
 
 @Service
@@ -27,15 +34,19 @@ public class MotoristaService {
   private final PasswordEncoder passwordEncoder;
   private final EnderecoRepository enderecoRepository;
   private final EnderecoMapper enderecoMapper;
+  private final VeiculoRepository veiculoRepository;
+  private final VeiculoMapper veiculoMapper;
 
   public MotoristaService(MotoristaRepository motoristaRepository, MotoristaMapper motoristaMapper,
       PasswordEncoder passwordEncoder, EnderecoRepository enderecoRepository,
-      EnderecoMapper enderecoMapper) {
+      EnderecoMapper enderecoMapper, VeiculoRepository veiculoRepository, VeiculoMapper veiculoMapper) {
     this.motoristaRepository = motoristaRepository;
     this.motoristaMapper = motoristaMapper;
     this.passwordEncoder = passwordEncoder;
     this.enderecoRepository = enderecoRepository;
     this.enderecoMapper = enderecoMapper;
+    this.veiculoRepository = veiculoRepository;
+    this.veiculoMapper = veiculoMapper;
   }
 
   public Motorista cadastrarMotorista(MotoristaCadastrarDto motoristaCadastroDto) {
@@ -86,11 +97,26 @@ public class MotoristaService {
     Endereco endereco = enderecoRepository.findById(enderecoEditarDto.getId()).get();
     enderecoMapper.updateEntity(enderecoEditarDto, endereco);
     enderecoRepository.save(endereco);
-
-    Motorista motorista = motoristaRepository.findByEmail(email).get();
-    motorista.setEndereco(endereco);
-    motoristaRepository.save(motorista);
     return enderecoEditarDto;
+  }
+
+  public Veiculo cadastrarVeiculo(String email, VeiculoCadastrarDto veiculoCadastrarDto) {
+    Veiculo veiculo = veiculoMapper.toEntity(veiculoCadastrarDto);
+    Motorista motorista = motoristaRepository.findByEmail(email).get();
+    veiculo.setMotorista(motorista);
+    return veiculoRepository.save(veiculo);
+  }
+
+  public List<VeiculoListarDto> listarVeiculos(String email) {
+    return veiculoMapper
+        .toDtoListar(veiculoRepository.findByMotorista(motoristaRepository.findByEmail(email).get()));
+  }
+
+  public VeiculoEditarDto editarVeiculo(String email, VeiculoEditarDto veiculoEditarDto) {
+    Veiculo veiculo = veiculoRepository.findById(veiculoEditarDto.getId()).get();
+    veiculoMapper.updateEntity(veiculoEditarDto, veiculo);
+    veiculoRepository.save(veiculo);
+    return veiculoEditarDto;
   }
 
   private void verificarTelefoneMotorista(String telefone, Long id) {

@@ -20,7 +20,6 @@ public class EnderecoEditarDto {
   private String rua;
 
   @NotBlank
-  @Email
   @Pattern(regexp = "\\d")
   @Size(min = 1, max = 10)
   private String numero;

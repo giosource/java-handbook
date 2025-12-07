@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 
 public class EnderecoCadastrarDto {
 
-
   @NotBlank
   @Pattern(regexp = "\\d{8}")
   @Size(min = 8, max = 8)
@@ -18,7 +17,6 @@ public class EnderecoCadastrarDto {
   private String rua;
 
   @NotBlank
-  @Email
   @Pattern(regexp = "\\d")
   @Size(min = 1, max = 10)
   private String numero;

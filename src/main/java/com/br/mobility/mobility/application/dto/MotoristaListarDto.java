@@ -7,16 +7,18 @@ public class MotoristaListarDto {
   private String email;
   private String cnh;
   private String cpf;
+  private boolean passe;
 
   public MotoristaListarDto() {
   }
 
-  public MotoristaListarDto(String nome, String telefone, String email, String cnh, String cpf) {
+  public MotoristaListarDto(String nome, String telefone, String email, String cnh, String cpf, boolean passe) {
     this.nome = nome;
     this.telefone = telefone;
     this.email = email;
     this.cnh = cnh;
     this.cpf = cpf;
+    this.passe = passe;
   }
 
   public String getNome() {
@@ -57,6 +59,14 @@ public class MotoristaListarDto {
 
   public void setCpf(String cpf) {
     this.cpf = cpf;
+  }
+
+  public boolean isPasse() {
+    return passe;
+  }
+
+  public void setPasse(boolean passe) {
+    this.passe = passe;
   }
 
 }

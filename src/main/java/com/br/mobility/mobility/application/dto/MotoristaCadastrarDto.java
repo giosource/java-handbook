@@ -35,6 +35,9 @@ public class MotoristaCadastrarDto {
   @Pattern(regexp = "\\d{11}")
   private String cpf;
 
+  @NotBlank
+  private boolean passe;
+
   public MotoristaCadastrarDto() {
   }
 
@@ -43,13 +46,15 @@ public class MotoristaCadastrarDto {
       @NotBlank @Pattern(regexp = "\\d{11}") String telefone,
       @NotBlank @Email @Pattern(regexp = "^[A-Za-z0-9]+@[A-Za-z0-9]+\\.[A-Za-z0-9]+$") @Size(min = 5, max = 100) String email,
       @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$%*#?]{8,}$") @Size(min = 8, max = 50) String senha,
-      @NotBlank @Pattern(regexp = "\\d{9}") String cnh, @NotBlank @Pattern(regexp = "\\d{11}") String cpf) {
+      @NotBlank @Pattern(regexp = "\\d{9}") String cnh, @NotBlank @Pattern(regexp = "\\d{11}") String cpf,
+      @NotBlank boolean passse) {
     this.nome = nome;
     this.telefone = telefone;
     this.email = email;
     this.senha = senha;
     this.cnh = cnh;
     this.cpf = cpf;
+    this.passe = passse;
   }
 
   public String getNome() {
@@ -98,6 +103,14 @@ public class MotoristaCadastrarDto {
 
   public void setCpf(String cpf) {
     this.cpf = cpf;
+  }
+
+  public boolean isPassse() {
+    return passe;
+  }
+
+  public void setPassse(boolean passse) {
+    this.passe = passse;
   }
 
 }
